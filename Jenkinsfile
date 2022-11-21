@@ -7,11 +7,11 @@ pipeline {
   environment {
     //dockerHubRegistry = 'cyaninn/demo-eks-cicd' 
     //dockerHubRegistryCredential = 'credential-dockerhub'
-    awsecrRegistry = '605680513436.dkr.ecr.ap-northeast-2.amazonaws.com/groom-pj-app-for-eks'
-    awsecrRegistryCredentail = 'credential-AWS-ECR'
-    githubCredential = 'credential-github'
-    gitEmail = 'sounddevice3@gmail.com'
-    gitName = 'cyaninn-entj'
+    awsecrRegistry = 'public.ecr.aws/l5r3k6n0/groom-pj-app-for-eks'
+    awsecrRegistryCredentail = 'cred-aws'
+    githubCredential = 'cred-github'
+    gitEmail = 'ginami0129n@naver.com'
+    gitName = 'ginami0129'
   }
 
   stages {
