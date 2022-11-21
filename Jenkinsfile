@@ -19,7 +19,7 @@ pipeline {
     // 깃허브 계정으로 레포지토리를 클론한다.
     stage('Checkout Application Git Branch') {
       steps {
-        checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: githubCredential, url: 'https://github.com/cyaninn-entj/mini-cicd-eks-project.git']]])
+        checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: githubCredential, url: 'https://github.com/ginami0129/mini-cicd-eks-project.git']]])
       }
       // steps 가 끝날 경우 실행한다.
       // steps 가 실패할 경우에는 failure 를 실행하고 성공할 경우에는 success 를 실행한다.
@@ -55,7 +55,7 @@ pipeline {
     stage('Docker Image Push') {
       steps {
         // 젠킨스에 등록한 계정으로 ECR 에 이미지 푸시
-        withDockerRegistry([url: "https://${awsecrRegistry}", credentialsId: "ecr:ap-northeast-2:${awsecrRegistryCredentail}"]) {
+        withDockerRegistry([url: "https://${awsecrRegistry}", credentialsId: "ecr:ap-northeast-1:${awsecrRegistryCredentail}"]) {
           sh "docker push ${awsecrRegistry}:${currentBuild.number}"
           sh "docker push ${awsecrRegistry}:latest"
           // 10초 쉰 후에 다음 작업 이어나가도록 함
@@ -83,7 +83,7 @@ pipeline {
       steps {
         // git 계정 로그인, 해당 레포지토리의 main 브랜치에서 클론
         git credentialsId: githubCredential,
-            url: 'https://github.com/cyaninn-entj/mini-cicd-eks-project.git',
+            url: 'https://github.com/ginami0129/mini-cicd-eks-project.git',
             branch: 'main'  
         /*
         // 이미지 태그 변경 후 메인 브랜치에 푸시
