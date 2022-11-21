@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demo-chat-app
+spec:
+  replicas: 1
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      app: demo-chat-app
+  template:
+    metadata:
+      labels:
+        app: demo-chat-app
+    spec:
+      containers:
+      - image: 605680513436.dkr.ecr.ap-northeast-2.amazonaws.com/groom-pj-app-for-eks:latest
+        name: demo-chat-app
+        ports:
+        - containerPort: 80
