@@ -34,12 +34,14 @@ pipeline {
     }
     
     stage('Build docker image') {
+      steps {
         container('docker') {
             withDockerRegistry([url: "https://${awsecrRegistry}", credentialsId: "ecr:ap-northeast-1:${awsecrRegistryCredentail}"]) {
                 sh "docker build -t ${awsecrRegistry}:latest -f ./Dockerfile ."
             }
         }
-            // 성공, 실패 시 슬랙에 알람오도록 설정
+      }
+      // 성공, 실패 시 슬랙에 알람오도록 설정
       post {
         failure {
           echo 'Docker image build failure'
