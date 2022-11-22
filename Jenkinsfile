@@ -32,25 +32,47 @@ pipeline {
         }
       }
     }
+    
+    stage('Build docker image') {
+    container('docker') {
+        steps {
+          // 도커 이미지 빌드
+          sh "docker build . -t ${awsecrRegistry}:${currentBuild.number}"
+          sh "docker build . -t ${awsecrRegistry}:latest"
+        }
+        // 성공, 실패 시 슬랙에 알람오도록 설정
+        post {
+          failure {
+            echo 'Docker image build failure'
+            //slackSend (color: '#FF0000', message: "FAILED: Docker Image Build '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+          }
+          success {
+            echo 'Docker image build success'
+            //slackSend (color: '#0AC9FF', message: "SUCCESS: Docker Image Build '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+          }
+        }
+      }
+    }
 
-    stage('Docker Image Build') {
-      steps {
-        // 도커 이미지 빌드
-        sh "docker build . -t ${awsecrRegistry}:${currentBuild.number}"
-        sh "docker build . -t ${awsecrRegistry}:latest"
-      }
-      // 성공, 실패 시 슬랙에 알람오도록 설정
-      post {
-        failure {
-          echo 'Docker image build failure'
-          //slackSend (color: '#FF0000', message: "FAILED: Docker Image Build '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
-        }
-        success {
-          echo 'Docker image build success'
-          //slackSend (color: '#0AC9FF', message: "SUCCESS: Docker Image Build '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
-        }
-      }
-    }  
+
+//     stage('Docker Image Build') {
+//       steps {
+//         // 도커 이미지 빌드
+//         sh "docker build . -t ${awsecrRegistry}:${currentBuild.number}"
+//         sh "docker build . -t ${awsecrRegistry}:latest"
+//       }
+//       // 성공, 실패 시 슬랙에 알람오도록 설정
+//       post {
+//         failure {
+//           echo 'Docker image build failure'
+//           //slackSend (color: '#FF0000', message: "FAILED: Docker Image Build '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+//         }
+//         success {
+//           echo 'Docker image build success'
+//           //slackSend (color: '#0AC9FF', message: "SUCCESS: Docker Image Build '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+//         }
+//       }
+//     }  
 
     stage('Docker Image Push') {
       steps {
